@@ -8,4 +8,7 @@ export class State {
 
     @Column('simple-json')
     state: JObject;
+
+    @Column()
+    story_filename: string;
 }

@@ -30,7 +30,8 @@ export class GameService {
     const game = new inkjs.Story(this.storyData);
     await this.repo.insert({
       uuid: userId,
-      state: game.state.jsonToken
+      state: game.state.jsonToken,
+      story_filename: ''
     });
     return game;
   }
