@@ -1,20 +1,22 @@
 {
-  "name": "rpg_bot",
+  "name": "DetectiveBeansBot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "node ."
+    "start": "ts-node src/index.ts"
   },
-  "author": "",
-  "license": "GNU GPLv3",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "ts-node": "3.3.0",
+    "@types/node": "^8.0.29",
+    "typescript": "3.3.3333"
+  },
   "dependencies": {
     "discord.js": "^11.5.1",
     "fuzzy-search": "^3.0.1",
     "inkjs": "^1.10.2",
-    "knex": "^0.19.5",
-    "mysql": "^2.17.1",
-    "number-to-words": "^1.2.4",
-    "turndown": "^5.0.3"
+    "pg": "^7.3.0",
+    "turndown": "^5.0.3",
+    "typeorm": "0.2.22"
   }
 }
