@@ -15,7 +15,7 @@ export class MessageHandler {
                       > \`!restart\` - restart your playthrough of *The Intercept*.
                       > \`!forget\` - delete your current playthough.
                       > \`!sitrep\` - see the last message and your current options.
-                      > \`!choose\` - select a choice using either a number or text.
+                      > \`!select\` - select a choice using either a number or text.
                       > Progress is saved automatically when each choice is made.`
         message.channel.send(payload);
         return;
