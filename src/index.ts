@@ -8,8 +8,7 @@ import { config } from './config';
 
   await createConnection();
 
-  const storyData = fs.readFileSync(config.story);
-  const gameService = new GameService(storyData);
+  GameService.loadGameFile();
 
   const client = new Client();
 
@@ -18,7 +17,7 @@ import { config } from './config';
   });
 
   client.on('message', async (message: Message) => {
-    await MessageHandler.onMessage(message, gameService);
+    await MessageHandler.onMessage(message);
   });
 
   client.login(config.token);

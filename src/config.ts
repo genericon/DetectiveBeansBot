@@ -6,11 +6,11 @@
 export type BotConfig = {
   /** the Discord bot token. */
   token: string,
-  /** The path to the story file */
-  story: string,
+  /** The path to the story directory */
+  story_dir: string,
 };
 
 export let config: BotConfig = {
   token: process.env['DISCORD_BOT_TOKEN'],
-  story: process.env['DISCORD_BOT_STORY'] || "../stories/intercept.json",
+  story_dir: process.env['DISCORD_BOT_STORY_DIR'] || "../stories/",
 };

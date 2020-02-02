@@ -6,7 +6,7 @@ import { GameService } from './GameService';
 
 
 export class MessageHandler {
-  static async onMessage(message: Message, gameService: GameService) {
+  static async onMessage(message: Message) {
       if (message.author.bot || message.channel.type !== 'dm') return;
 
       if (message.content === '!help') {
@@ -21,9 +21,9 @@ export class MessageHandler {
         return;
       }
 
-      let gameState = await gameService.checkSave(message.author.id);
+      let gameState = await GameService.checkSave(message.author.id);
       let game: Story;
-      if (!gameState) {
+      if (typeof gameState === 'undefined') {
         if (message.content !== '!start') {
           let payload = `> Hello, ${message.author.username}.
                         > To start a game of **The Intercept** reply \`!start\`.
@@ -31,33 +31,33 @@ export class MessageHandler {
           message.channel.send(payload);
           return;
         } else {
-          game = await gameService.createGame(message.author.id);
+          game = await GameService.createGame(message.author.id);
           game.ContinueMaximally();
         }
       } else {
-        game = await gameService.loadGame(message.author.id);
+        game = await GameService.loadGame(message.author.id);
         game.ContinueMaximally();
       }
 
       let text = [];
 
       if (message.content === '!forget') {
-        gameService.destroyGame(message.author.id);
+        GameService.destroyGame(message.author.id);
         message.channel.send('> Game progress forgotten. Reply `!start` to begin a new game.');
         return;
       } else if (message.content === '!sitrep' || message.content === '!start') {
         game.ContinueMaximally();
-        text.push(...gameService.getCurrentText(game));
-        text.push(...gameService.sendChoices(message, game));
+        text.push(...GameService.getCurrentText(game));
+        text.push(...GameService.sendChoices(game));
         message.channel.send(text.join('\n'));
         return;
       } else if (message.content === '!restart') {
-        gameService.destroyGame(message.author.id);
+        GameService.destroyGame(message.author.id);
         message.channel.send('> Game progress forgotten. Restarting game.');
-        game = await gameService.createGame(message.author.id);
+        game = await GameService.createGame(message.author.id);
         game.ContinueMaximally();
-        text.push(...gameService.getCurrentText(game));
-        text.push(...gameService.sendChoices(message, game));
+        text.push(...GameService.getCurrentText(game));
+        text.push(...GameService.sendChoices(game));
         message.channel.send(text.join('\n'));
         return;
       }
@@ -76,7 +76,7 @@ export class MessageHandler {
           const searcher = new FuzzySearch(game.currentChoices, ['text'], {
             caseSensitive: false,
           });
-          result = await searcher.search(message.content);  
+          result = await searcher.search(message.content);
         }
 
         if (result.length > 0 && result[0].text.length > 0) {
@@ -87,13 +87,13 @@ export class MessageHandler {
           }
         } else {
           text.push(MessageFormatter.message('**Pardon?**'));
-          text.push(...gameService.getCurrentText(game));
+          text.push(...GameService.getCurrentText(game));
         }
       }
 
-      text.push(...gameService.sendChoices(message, game));
+      text.push(...GameService.sendChoices(game));
       message.channel.send(text.join('\n'));
 
-      gameService.saveGame(message.author.id, game);
+      await GameService.saveGame(message.author.id, game);
   }
 };
